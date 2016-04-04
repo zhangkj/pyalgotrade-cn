@@ -35,7 +35,6 @@ import symbolsxml
 
 storage = "data"
 
-
 def get_csv_filename(symbol, year):
     return os.path.join(storage, "%s-%d-yahoofinance.csv" % (symbol, year))
 
@@ -57,6 +56,7 @@ def download_files_for_symbol(symbol, fromYear, toYear):
                 logger.error(str(e))
                 status += "0"
         else:
+            print "exist "+fileName
             status += "1"
 
     if status.find("1") == -1:
@@ -70,7 +70,8 @@ def main():
     toYear = 2013
 
     try:
-        symbolsFile = os.path.join("..", "symbols", "merval.xml")
+        #symbolsFile = os.path.join("..", "symbols", "merval.xml")
+        symbolsFile = os.path.join("..", "symbols", "sp500.xml")
         callback = lambda stock: download_files_for_symbol(stock.getTicker(), fromYear, toYear)
         symbolsxml.parse(symbolsFile, callback, callback)
     except Exception, e:

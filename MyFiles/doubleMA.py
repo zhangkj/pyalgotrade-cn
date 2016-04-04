@@ -65,12 +65,12 @@ class DoubleMA(strategy.BacktestingStrategy):
             if cross.cross_above(self.__ma1, self.__ma2) > 0:
                 shares = int(self.getBroker().getEquity() * 0.2 / bars[self.__instrument].getPrice())
                 self.__position = self.enterLong(self.__instrument, shares)
-                print bars[self.__instrument].getDateTime(), bars[self.__instrument].getPrice()
+                #print bars[self.__instrument].getDateTime(), bars[self.__instrument].getPrice()
                 #self.info("buy %s" % (bars.getDateTime()))
-
-
-if __name__ == "__main__":
-    strat = DoubleMA
+    
+    
+if __name__ == "__main__": 
+    strat = DoubleMA    
     instrument = '000001'
     market = 'SZ'
     fromDate = '20140101'
@@ -78,29 +78,29 @@ if __name__ == "__main__":
     frequency = bar.Frequency.DAY
     paras = [5, 20]
     plot = True
-
-    #############################################path set ############################33
+    
+    #############################################path set ############################33 
     if frequency == bar.Frequency.MINUTE:
         path = "..\\histdata\\min\\"
     elif frequency == bar.Frequency.DAY:
         path = "..\\histdata\\day\\"
     filepath = path + instrument + market + ".csv"
-
-
-    #############################################don't change ############################33
+    
+    
+    #############################################don't change ############################33  
     from pyalgotrade.barfeed.csvfeed import GenericBarFeed
 
-
+    
     barfeed = GenericBarFeed(frequency)
     barfeed.setDateTimeFormat('%Y-%m-%d %H:%M:%S')
     barfeed.addBarsFromCSV(instrument, filepath)
     strat = strat(barfeed, instrument, *paras)
-
+    
     if plot:
         plt = plotter.StrategyPlotter(strat, True, True, True)
-
+        
     strat.run()
-
+    
     if plot:
         plt.plot()
         

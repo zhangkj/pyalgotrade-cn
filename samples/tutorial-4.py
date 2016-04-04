@@ -14,14 +14,14 @@ class MyStrategy(strategy.BacktestingStrategy):
 
     def onEnterOk(self, position):
         execInfo = position.getEntryOrder().getExecutionInfo()
-        self.info("BUY at $%.2f" % (execInfo.getPrice()))
+        #self.info("BUY at $%.2f" % (execInfo.getPrice()))
 
     def onEnterCanceled(self, position):
         self.__position = None
 
     def onExitOk(self, position):
         execInfo = position.getExitOrder().getExecutionInfo()
-        self.info("SELL at $%.2f" % (execInfo.getPrice()))
+        #self.info("SELL at $%.2f" % (execInfo.getPrice()))
         self.__position = None
 
     def onExitCanceled(self, position):
@@ -52,6 +52,17 @@ def run_strategy(smaPeriod):
     # Evaluate the strategy with the feed.
     myStrategy = MyStrategy(feed, "orcl", smaPeriod)
     myStrategy.run()
-    print "Final portfolio value: $%.2f" % myStrategy.getBroker().getEquity()
+    portfolioValue=myStrategy.getBroker().getEquity()
+    print "smaPeriod:"+str(smaPeriod)+",Final portfolio value: $%.2f" % portfolioValue
+    return  portfolioValue,smaPeriod
 
-run_strategy(15)
+maxValue = 0
+smaPeriod = 0
+#run_strategy(15)
+for i in range(10,30):
+    result,smaResule = run_strategy(i)
+    if result>maxValue:
+        maxValue=result
+        smaPeriod = smaResule
+
+print "smaPeriod:"+str(smaPeriod)+",maxValue:"+str(maxValue)
